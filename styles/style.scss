@@ -96,7 +96,7 @@ $samsung-bold: Samsung Sharp Sans Bold;
   }
   #nav-container .bg {
     position: absolute;
-    top: 100px;
+    top: 65px;
     left: 0;
     width: 100%;
     height: calc(100% - 70px);
@@ -156,7 +156,7 @@ $samsung-bold: Samsung Sharp Sans Bold;
   }
 
   #nav-content {
-    margin-top: 100px;
+    margin-top: 65px;
     padding: 20px;
     width: 90%;
     max-width: 300px;
@@ -551,6 +551,20 @@ $samsung-bold: Samsung Sharp Sans Bold;
 @media (min-width: 1024px) {
   header {
     height: 85px !important;
+  }
+  .button {
+    height: 85px !important;
+  }
+  .search-bar {
+    top: 33px !important;
+  }
+  #nav-container {
+    .bg {
+      top: 85px !important;
+    }
+  }
+  #nav-content {
+    margin-top: 85px !important;
   }
   .opinions {
     .opinion {
