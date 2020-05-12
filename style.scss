@@ -288,4 +288,81 @@ $samsung-bold: Samsung Sharp Sans Bold;
   }
 }
 @media (min-width: 1024px) {
+  .opinions {
+    .opinion {
+      left: 50%;
+    }
+  }
+}
+
+@media (min-width: 1440px) {
+  .opinions {
+    .opinion {
+      left: 53%;
+      top: 10rem !important;
+      margin-right: 200px;
+    }
+  }
+  //s20 container
+  .s20-image {
+    img {
+      padding-left: 30rem !important;
+      padding-right: 30rem !important;
+    }
+  }
+  .info {
+    padding-left: 4rem !important;
+    padding-right: 4rem !important;
+    text-align: center;
+    p {
+      font-size: 16px !important;
+    }
+    .name {
+      p {
+        font-family: $samsung-bold;
+        font-size: 30px !important;
+        padding-bottom: 2rem;
+      }
+    }
+    .price {
+      margin-bottom: 2rem;
+      #price {
+        font-family: $samsung-bold;
+        font-size: 25px !important;
+        margin-bottom: 1rem;
+      }
+    }
+  }
+  .camera-container {
+    padding-left: 4rem !important;
+    padding-right: 4rem !important;
+  }
+  .video-container {
+    padding: 4rem !important;
+    font-size: 18px !important;
+    line-height: 30px !important;
+
+    .video-image {
+      width: 60% !important;
+      display: grid !important;
+      justify-content: center !important;
+      align-items: center !important;
+    }
+
+    .video-text {
+      display: grid !important;
+      align-items: center !important;
+    }
+  }
+  .community-container {
+    grid-area: community-container;
+    padding-left: 4rem !important;
+    padding-right: 4rem !important;
+  }
+  .camera-text-top {
+    margin-left: 4rem !important;
+  }
+  .camera-text-bottom {
+    margin-left: 4rem !important;
+  }
 }
