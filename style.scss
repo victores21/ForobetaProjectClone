@@ -366,3 +366,13 @@ $samsung-bold: Samsung Sharp Sans Bold;
     margin-left: 4rem !important;
   }
 }
+@media (min-width: 1445px) {
+  .full-size {
+    width: 100%;
+    display: grid;
+    justify-content: center;
+    .container {
+      max-width: 1440px;
+    }
+  }
+}
