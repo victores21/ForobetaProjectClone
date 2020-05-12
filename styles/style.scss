@@ -35,14 +35,209 @@ $samsung-bold: Samsung Sharp Sans Bold;
 .container {
   width: 100%;
   min-height: 100%;
-  margin-top: 3rem;
   display: grid;
   grid-template-areas:
+    "page"
     "opinions"
     "discover-s20"
     "camera-container"
     "video-container"
     "community-container";
+
+  /*Navbar*/
+
+  .page {
+    grid-area: page;
+    width: 100%;
+    z-index: 1;
+    background: #fdfdfd;
+    font-family: "Encode Sans Condensed", sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: #212121;
+  }
+  .search-bar {
+    height: auto;
+    position: fixed;
+    right: 4rem;
+    top: 40px;
+    z-index: 2;
+    i {
+      font-size: 30px;
+      cursor: pointer;
+    }
+  }
+  header {
+    display: flex;
+    position: fixed;
+    width: 100%;
+    //height: 100%;
+    height: 100px;
+    background: #fff;
+    color: #000;
+    justify-content: center;
+    align-items: center;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.41);
+    -moz-box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.41);
+    box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.41);
+    img {
+      vertical-align: middle;
+      height: auto;
+      max-width: 150px;
+    }
+  }
+
+  #nav-container {
+    position: fixed;
+    height: 100vh;
+    width: 100%;
+    pointer-events: none;
+  }
+  #nav-container .bg {
+    position: absolute;
+    top: 100px;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 70px);
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.3s;
+    background: #000;
+  }
+  #nav-container:focus-within .bg {
+    visibility: visible;
+    opacity: 0.6;
+  }
+  #nav-container * {
+    visibility: visible;
+  }
+
+  .button {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 1;
+    -webkit-appearance: none;
+    border: 0;
+    background: transparent;
+    border-radius: 0;
+    height: 100px;
+    width: 30px;
+    cursor: pointer;
+    pointer-events: auto;
+    margin-left: 4rem;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  }
+  .icon-bar {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background: rgb(0, 0, 0);
+    transition: 0.3s;
+  }
+  .icon-bar + .icon-bar {
+    margin-top: 5px;
+  }
+
+  #nav-container:focus-within .button {
+    pointer-events: none;
+  }
+  #nav-container:focus-within .icon-bar:nth-of-type(1) {
+    transform: translate3d(0, 8px, 0) rotate(45deg);
+  }
+  #nav-container:focus-within .icon-bar:nth-of-type(2) {
+    opacity: 0;
+  }
+  #nav-container:focus-within .icon-bar:nth-of-type(3) {
+    transform: translate3d(0, -8px, 0) rotate(-45deg);
+  }
+
+  #nav-content {
+    margin-top: 100px;
+    padding: 20px;
+    width: 90%;
+    max-width: 300px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: calc(100% - 70px);
+    background: #ececec;
+    pointer-events: auto;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    transform: translateX(-100%);
+    transition: transform 0.3s;
+    will-change: transform;
+    contain: paint;
+  }
+
+  #nav-content ul {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #nav-content li a {
+    padding: 10px 5px;
+    display: block;
+    text-transform: uppercase;
+    transition: color 0.1s;
+  }
+
+  #nav-content li a:hover {
+    color: #bf7497;
+  }
+
+  #nav-content li:not(.small) + .small {
+    margin-top: auto;
+  }
+
+  .small {
+    display: flex;
+    align-self: center;
+  }
+
+  .small a {
+    font-size: 12px;
+    font-weight: 400;
+    color: #888;
+  }
+  .small a + a {
+    margin-left: 15px;
+  }
+
+  #nav-container:focus-within #nav-content {
+    transform: none;
+  }
+
+  a,
+  a:visited,
+  a:focus,
+  a:active,
+  a:link {
+    text-decoration: none;
+    outline: 0;
+  }
+
+  a {
+    color: currentColor;
+    transition: 0.2s ease-in-out;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin: 0;
+  }
+
+  ul {
+    padding: 0;
+    list-style: none;
+  }
+
   /*Opinion Container*/
   .opinions {
     grid-area: opinions;
@@ -50,6 +245,7 @@ $samsung-bold: Samsung Sharp Sans Bold;
     padding-left: 0.8rem;
     padding-right: 0.8rem;
     line-height: 20px;
+    margin-top: 5rem;
 
     img {
       width: 100%;
