@@ -59,11 +59,11 @@ $samsung-bold: Samsung Sharp Sans Bold;
   .search-bar {
     height: auto;
     position: fixed;
-    right: 4rem;
+    right: 1rem;
     top: 40px;
     z-index: 2;
     i {
-      font-size: 30px;
+      font-size: 25px;
       cursor: pointer;
     }
   }
@@ -127,7 +127,7 @@ $samsung-bold: Samsung Sharp Sans Bold;
     width: 30px;
     cursor: pointer;
     pointer-events: auto;
-    margin-left: 4rem;
+    margin-left: 1rem;
     touch-action: manipulation;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   }
@@ -242,13 +242,12 @@ $samsung-bold: Samsung Sharp Sans Bold;
   /* Slideshow container */
   .slideshow-container {
     position: relative;
-    background: #fffffff1;
   }
 
   /* Slides */
   .mySlides {
     display: none;
-    padding: 80px;
+    padding: 10px;
   }
 
   /* Next & previous buttons */
@@ -259,13 +258,13 @@ $samsung-bold: Samsung Sharp Sans Bold;
     top: 50%;
     width: auto;
     margin-top: -30px;
-    padding: 16px;
     color: #5e5e5e;
     font-weight: 100;
     font-size: 20px;
     border-radius: 0 3px 3px 0;
     user-select: none;
-    font-size: 50px;
+    font-size: 30px;
+    margin: -13px;
   }
 
   /* Position the "next button" to the right */
@@ -280,7 +279,7 @@ $samsung-bold: Samsung Sharp Sans Bold;
   /* Add an italic font style to all quotes */
   q {
     font-family: $samsung-regular;
-    font-size: 20px;
+    font-size: 12px;
   }
 
   /* Add a blue color to the author */
@@ -288,7 +287,7 @@ $samsung-bold: Samsung Sharp Sans Bold;
     color: #000;
     font-family: $samsung-bold;
     padding-top: 1rem;
-    font-size: 20px;
+    font-size: 14px;
   }
   /*Opinion Container*/
   .opinions {
@@ -297,7 +296,7 @@ $samsung-bold: Samsung Sharp Sans Bold;
     padding-left: 0.8rem;
     padding-right: 0.8rem;
     line-height: 20px;
-    margin-top: 5rem;
+    margin-top: 8rem;
 
     img {
       width: 100%;
@@ -475,6 +474,19 @@ $samsung-bold: Samsung Sharp Sans Bold;
   //opinion
   .opinion {
     top: 6rem !important;
+
+    .mySlides {
+      padding: 80px !important;
+
+      q {
+        font-size: 16px !important;
+      }
+    }
+
+    .prev,
+    .next {
+      padding: 20px !important;
+    }
   }
   //s20 container
   .s20-image {
@@ -540,16 +552,44 @@ $samsung-bold: Samsung Sharp Sans Bold;
   .opinions {
     .opinion {
       left: 50%;
+
+      .slideshow-container {
+        margin-right: 3rem !important;
+
+        .mySlides {
+          padding: 1rem !important;
+        }
+
+        .prev,
+        .next {
+          padding: 0 !important;
+        }
+      }
     }
   }
 }
 
 @media (min-width: 1440px) {
+  .button {
+    margin-left: 4rem !important;
+  }
+  .search-bar {
+    margin-right: 4rem !important;
+  }
   .opinions {
     .opinion {
       left: 53%;
       top: 10rem !important;
       margin-right: 200px;
+
+      .mySlides {
+        q {
+          font-size: 20px !important;
+        }
+        .author {
+          font-size: 20px !important;
+        }
+      }
     }
   }
   //s20 container
