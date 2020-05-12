@@ -221,3 +221,69 @@ $samsung-bold: Samsung Sharp Sans Bold;
     }
   }
 }
+
+@media (min-width: 768px) {
+  //opinion
+  .opinion {
+    top: 6rem !important;
+  }
+  //s20 container
+  .s20-image {
+    img {
+      padding-left: 10rem !important;
+      padding-right: 10rem !important;
+    }
+  }
+  .buy-button {
+    padding: 1rem !important;
+    a {
+      padding: 1rem 2rem !important;
+    }
+  }
+
+  //108mp-container
+  .camera-container {
+    grid-area: camera-container;
+    display: grid;
+    grid-template-areas:
+      "camera-image camera-text-top"
+      "camera-image camera-text-bottom";
+    grid-template-columns: 1fr 1fr;
+    margin-top: 3rem !important;
+    .camera-image {
+      grid-area: camera-image;
+    }
+    .camera-text-top {
+      margin-left: 1rem;
+      grid-area: camera-text-top;
+    }
+    .camera-text-bottom {
+      margin-left: 1rem;
+      grid-area: camera-text-bottom;
+      margin-top: 1rem;
+    }
+  }
+  //video 8k
+  .video-container {
+    display: grid;
+    grid-template-areas: "video-image video-text";
+    .video-image {
+      grid-area: video-image;
+      img {
+        width: 100%;
+        padding: 1rem;
+      }
+    }
+
+    .video-text {
+      grid-area: video-text;
+      margin-top: 1rem;
+      #video-strong {
+        font-family: $samsung-bold;
+      }
+      #video-text-bottom {
+        margin-top: 1rem;
+      }
+    }
+  }
+}
