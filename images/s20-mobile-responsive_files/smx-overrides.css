@@ -1,0 +1,83 @@
+
+/* Ocultar BC
+#product-page #div_content_rewardValue{ display:none !important; opacity:0;height:0; overflow:hidden; } */
+
+.help-btn{ z-index:1000}
+.product-listing .listItem .item-savings{
+    color: #ED5444;
+    text-align: center;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+	font-weight: 700;
+}
+.product-listing .listItem .item-savings .savings-label{ margin-right: 5px; }
+
+
+body.content.galaxy-note-10{
+  
+}
+body.content.galaxy-note-10 .container .banner-stop-talking{
+  position: relative;
+}
+body.content.galaxy-note-10 .container .banner-stop-talking .link{
+  position: absolute;
+  width:50%;
+  top:0;
+  bottom:0;
+}
+body.content.galaxy-note-10 .container .banner-stop-talking .link.link-1{
+  left:0;
+}
+body.content.galaxy-note-10 .container .banner-stop-talking .link.link-2{
+  right:0;
+}
+
+/* Landing Galaxy M overrides */
+body.landing.galaxy-m #content .section-2 .img h2{
+	margin-top:-70px;
+}
+body.landing.galaxy-m #content .section-3 .img h2{
+	margin-top:-90px;
+  margin-bottom:40px;
+}
+body.landing.galaxy-m #content .section-4 .img h2{
+  margin-top:-70px;
+}
+
+.flags .flag.note-10-y-s10-lite{ 
+    display: block;
+    position: absolute;
+    background-image: url(/arquivos/flag-1000-bc-advance.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    width: 70px;
+    height: 70px;
+    right: -7px;
+    top: 0;
+    z-index: 2;
+}
+
+#main-product .flags .flag.note-10-y-s10-lite{
+	right: -15px;
+}
+
+@media screen and (min-width:768px){
+  	.static-content.galaxym .product-listing ul li{
+  	    width: calc(100% / 4);
+  	}
+  	.flags .flag.note-10-y-s10-lite{
+    	right: 3%;
+	}
+
+    #main-product .flags .flag.note-10-y-s10-lite{
+        right: -43px;
+    }
+
+}
+@media screen and (min-width:1024px){
+  .header .main-menu .dept-menu li .dropdown .drop-promo{
+    	max-width: 280px;
+  }
+}

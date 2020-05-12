@@ -1,0 +1,135 @@
+//script type="text/javascript"
+$(function(){
+
+    var BCinAdvance = {
+        init: function(){
+            BCinAdvance.forThePLP();
+            BCinAdvance.forThePDP();
+        },
+        numFormat: function(theNum){
+            var n = $.trim(theNum),
+                nsplt = n.split('.'),
+                nsplt = nsplt[0].replace(/[^0-9\,]+/g,"").replace(/[^0-9\.]+/g,""),
+                decPlaces = isNaN(decPlaces = Math.abs(decPlaces)) ? 0 : decPlaces,
+                thouSeparator = thouSeparator == undefined ? "," : thouSeparator,
+                sign = nsplt < 1 ? "-" : "$",
+                i = parseInt(nsplt = Math.abs(+nsplt || 0).toFixed(decPlaces)) + "",
+                j = (j = i.length) > 3 ? j % 3 : 0;
+            var price_show = sign + (j ? i.substr(0, j) + thouSeparator : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thouSeparator) + (decPlaces ? "." + Math.abs(nsplt - i).toFixed(decPlaces).slice(2) : "");
+            if(nsplt.length >2){
+                // console.log("processed-priced:"+price_show);
+                return price_show;
+            }
+        },
+        makeaNum: function(theNum){
+            var n = $.trim(theNum),
+                nsplt = n.split('.'),
+                nsplt = nsplt[0].replace(/[^0-9\,]+/g,"").replace(/[^0-9\.]+/g,"");
+            
+                var price_show = parseInt(nsplt);
+
+            if(nsplt.length > 1){
+                // console.log("processed-priced:"+price_show);
+                return price_show;
+            }
+
+        },
+        forThePLP: function(){
+            var $pageContent = $('main#content');
+            var $productItem = $pageContent.find('article.item');
+
+            $.each($productItem, function(i,e){
+                var $product = $(this);
+                // console.log($product);
+                var $discountFlags = $product.find('.discount');
+                var $highlightFlags = $product.find('.highlight');
+                var processBCAdvance = false;
+
+                if($discountFlags.find('[class^="flag bc-advance"]').length > 0){
+                    processBCAdvance = true;
+                //}else if($highlightFlags.find('[class^="flag bc-por-adelantado"]')){
+                }
+                
+                if(processBCAdvance && $product.length > 0 && !$product.hasClass('show-bc-advance')){
+                    var originalPrice = BCinAdvance.makeaNum($product.find('.old-price').text());
+                    var currentPrice = BCinAdvance.makeaNum($product.find('.best-price').text());
+                    var currentBC = BCinAdvance.makeaNum($product.find('.bluecoins-amount').text());
+
+                    // console.log('originalPrice:', originalPrice);
+                    // console.log('currentPrice:', currentPrice);
+                    // console.log('currentBC:', currentBC);
+
+                    // console.log('new BCs:');
+                    // console.log(originalPrice - currentPrice);
+
+                    var newBCAmount = originalPrice - currentPrice;
+                    var newBCPercentAmount = $product.find('.percent').text().replace('%','');
+
+                    // if(newBCAmount > 50){
+                        $product.addClass('show-bc-advance');
+                        $product.find('.percent').addClass('flag-bc-advance');
+                        if(!isNaN(newBCPercentAmount)){
+                            $product.find('.percent').addClass('flag-bc-advance').text()
+                        };
+                        $product.find('.bluecoins-reward').addClass('adv').removeClass('zero-bluecoins');
+                        $product.find('.old-price').hide();
+                        $product.find('.best-price').text($product.find('.old-price').text());
+                        $product.find('.bluecoins-amount').attr('data-bc',BCinAdvance.numFormat(newBCAmount));
+                        $product.find('.bluecoins-amount').text(BCinAdvance.numFormat(newBCAmount));
+                    // }
+
+                }
+            });
+        },//end forThePLP
+        forThePDP: function(){
+            if(typeof skuJson !== 'undefined' ){
+                var $product = $('#main-product');
+                var $discountFlags = $product.find('.flags');
+                var $highlightFlags = $product.find('.highlight');
+                var processBCAdvance = false;
+
+                if($discountFlags.find('[class^="flag bc-advance"]').length > 0){
+                    processBCAdvance = true;
+                //}else if($highlightFlags.find('[class^="flag bc-por-adelantado"]')){
+                }
+
+                console.log('processBCAdvance: ',processBCAdvance);
+
+                if(processBCAdvance && !$product.hasClass('show-bc-advance')){
+                    var originalPrice = BCinAdvance.makeaNum($product.find('.skuListPrice').text());
+                    var currentPrice = BCinAdvance.makeaNum($product.find('.skuBestPrice').text());
+                    var currentBC = BCinAdvance.makeaNum($product.find('.lblRewardValue').text());
+
+                    var percentDiscount = Math.floor((1 - (currentPrice / originalPrice))*100);
+                    console.log('percentDiscount:', percentDiscount);
+                    console.log('originalPrice:', originalPrice);
+                    console.log('currentPrice:', currentPrice);
+                    // console.log(currentBC);
+
+                    // console.log('new BCs:');
+                    console.log(originalPrice - currentPrice)
+
+                    var newBCAmount = originalPrice - currentPrice;
+
+                    // if(newBCAmount > 10){
+                        $product.addClass('show-bc-advance');
+                        $product.find('#div_content_rewardValue').addClass('adv');
+                        $product.find('.skuListPrice').hide();
+                        $product.find('.price-list-price').hide().css({'height':0});
+                        $product.find('.skuBestPrice').text($product.find('.skuListPrice').text());
+                        $product.find('.lblRewardValue').text(BCinAdvance.numFormat(newBCAmount));
+
+                        if(!isNaN(percentDiscount)){
+                            var discountFlag = $('<div>').addClass('flags').append('<div class="percent changed flag-bc-advance">'+ percentDiscount +'</div>');
+                        }
+
+                        $product.find('#imagem-product').prepend(discountFlag);
+                    // }
+                }
+            }
+        }
+    }//BCinAdvance
+
+    BCinAdvance.init();
+});
+//script

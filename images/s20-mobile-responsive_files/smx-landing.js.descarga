@@ -1,0 +1,530 @@
+$(function(){
+
+    var contentLanding = {
+        init: function(){
+
+            contentLanding.landing_buenFin();
+            contentLanding.landing_cyberWeek();
+            contentLanding.landing_ofertas();
+            contentLanding.landing_navidad();
+            contentLanding.limited_time_offer();
+            contentLanding.samsung_care();
+            contentLanding.featured_quotes();
+
+            $(window).on('resize', function(e) {
+                console.log('window resized');
+                //$('article.container-product .item-image').slick('resize');
+            });
+            $(document).on('resize', function(e) {
+                console.log('document resized');
+                //$('article.container-product .item-image').slick('resize');
+            });
+
+            //countdown('category landing-content singles-day', '11/12/2019 00:00 AM');
+            // $(".mw-countdown").countdown("2019/12/14", function(event) {
+            //     $(this).html( event.strftime('<h5>Oferta disponible por</h5><span class="days">%D días</span><br />%H:%M:%S') );
+            // });
+            contentLanding.mothersDay();
+
+        },
+
+        landing_ofertas: function(){
+
+            if ($('body').hasClass('landing-content ofertas')) {
+            
+                var slickSliderOpts = {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                    autoplay: true,
+                    // autoplaySpeed: 2000,
+                    arrows: true,
+                    dots: true,
+                    mobileFirst: true,
+                    responsive: [
+                        {
+                        breakpoint: 768,
+                        settings: "unslick"
+                        }
+                    ]
+                }
+                $('.is-slider').slick(slickSliderOpts);
+
+            }
+        },
+
+        limited_time_offer: function(){
+            var offerCountdown = function(){
+                var countDownSlides = $('.limited-time-offer');
+
+                console.log(countDownSlides.length);
+                if(countDownSlides.length > 0){
+                    countDownSlides.each(function(i,e){
+                        var dealProduct = $(this).data('product-id');
+                        var dealTimeLimit = $(this).data('limit');
+                        var dealCountdown = $(this).find('.offer-countdown');
+                        var dealProductWrapper = $(this).find('.product-wrapper');
+
+                        console.log('dealProduct:', dealProduct);
+                        console.log('dealTimeLimit:', dealTimeLimit);
+
+                        dealCountdown.countdown(dealTimeLimit, function(event) {
+                            var totalHours = event.offset.totalDays * 24 + event.offset.hours;
+                              $(this).html(event.strftime('%D:%H:%M:%S'));
+                        });
+
+                        //Get product data
+                        if(dealProduct !== undefined){
+                            var baseUrl = "/"
+                            var result;
+                            $.ajax({
+                                headers: {
+                                    "Accept": "application/vnd.vtex.ds.v10+json",
+                                    "Content-Type": "application/json",
+                                },
+                                // async: false,
+                                dataType: 'json',
+                                type: 'GET',
+                                url: baseUrl + 'api/catalog_system/pub/products/search?fq=productId:'+dealProduct,
+                                success: function (data) {
+                
+                                    // console.log(data);
+
+                                    var product = data[0];
+                                    var firstSku = '';
+                                    if(data.length > 0){
+                                        $.each(product.items, function(i,e){
+                                            if(e.sellers[0].commertialOffer.AvailableQuantity > 0){
+                                                return firstSku =  product.items[i];
+                                            }
+                                        });
+        
+                                        var productImage = firstSku.images[0].imageUrl.replace( firstSku.images[0].imageId , firstSku.images[0].imageId + '-400-400');
+                                        var productComm = firstSku.sellers[0].commertialOffer;
+                                        var productInventory = '';
+        
+                                        // console.log('productComm.AvailableQuantity:',productComm.AvailableQuantity);
+                                        if(productComm.AvailableQuantity < 10){
+                                            productInventory = '<div class="product-inventory">Solo '+ productComm.AvailableQuantity +' disp(s)</div>';
+                                        }
+        
+                                        var productListprice = '';
+                                        if(productComm.ListPrice >= productComm.Price){
+                                            productListprice = '<div class="product-listPrice">'+ WebsiteGlobal.global.numFormat( productComm.ListPrice ) +'</div>';
+                                        }
+        
+                                        var productPrice = '<div class="product-bestPrice">'+ WebsiteGlobal.global.numFormat( productComm.Price ) +'</div>';
+        
+                                        var productReward = '';
+                                        if(productComm.RewardValue > 0){
+                                            productReward = '<div class="bluecoins-reward">'+
+                                                                '<span class="bluecoins-amount nodec">' + WebsiteGlobal.global.numFormat( productComm.RewardValue ) + '</span>'+
+                                                                '<span class="bluecoins-icon-reward">Blue Coins</span>'+
+                                                            '</div>';
+                                        }
+        
+                                        // console.log(WebsiteGlobal.global.numFormat(productPrice));
+        
+                                        var productTemplate =   $('<article class="countdown-product">'+
+                                                                    '<a href="/'+ product.linkText +'/p" title="'+ product.productName +'">'+
+                                                                    '<picture class="product-image">'+
+                                                                        '<img src="'+ productImage +'" />'+
+                                                                    '</picture>'+
+                                                                    '</a>'+
+                                                                    '<a href="/'+ product.linkText +'/p" title="'+ product.productName +'">'+
+                                                                        '<h4 class="product-title">'+ product.productName +'</h4>'+
+                                                                        '<div class="product-price">'+
+                                                                            productListprice +
+                                                                            productPrice + 
+                                                                            productReward +
+                                                                        '</div>'+
+                                                                        productInventory +
+                                                                        '<div class="cta">Comprar ahora</div>'+
+                                                                    '</a>'+
+                                                                '</article>');
+                                        
+                                        dealProductWrapper.append(productTemplate);
+                                    }else{
+                                        dealProductWrapper.addClass('out-of-stock');
+                                        dealProductWrapper.append('<h2 class="text-center">Oferta Agotada</h2>');
+                                    }
+
+                                }
+                            });
+                        }
+
+                    });
+                }
+            }
+
+            if ($('.limited-time-offer').length > 0) {
+                offerCountdown();
+            }
+        },
+
+        landing_navidad: function(){
+            var dailyDeal = function(){
+                console.log('navidad');
+                var countDownSlides = $('[data-product-id].xmas-deal');
+
+                console.log(countDownSlides.length);
+                if(countDownSlides.length > 0){
+                    countDownSlides.each(function(i,e){
+                        var dealProduct = $(this).data('product-id');
+                        var dealTimeLimit = $(this).data('limit');
+                        var dealCountdown = $(this).find('.xmas-countdown');
+                        var dealProductWrapper = $(this).find('.product-wrapper');
+
+                        console.log('dealProduct:', dealProduct);
+                        console.log('dealTimeLimit:', dealTimeLimit);
+
+                        dealCountdown.countdown(dealTimeLimit, function(event) {
+                            var totalHours = event.offset.totalDays * 24 + event.offset.hours;
+                              $(this).html(event.strftime(totalHours + ':%M:%S'));
+                        });
+
+                        //Get product data
+                        if(dealProduct != ''){
+                            var baseUrl = "/"
+                            var result;
+                            $.ajax({
+                                headers: {
+                                    "Accept": "application/vnd.vtex.ds.v10+json",
+                                    "Content-Type": "application/json",
+                                },
+                                // async: false,
+                                dataType: 'json',
+                                type: 'GET',
+                                url: baseUrl + 'api/catalog_system/pub/products/search?fq=productId:'+dealProduct,
+                                success: function (data) {
+                
+                                    // console.log(data);
+
+                                    var product = data[0];
+                                    var firstSku = '';
+                                    if(data.length > 0){
+                                        $.each(product.items, function(i,e){
+                                            if(e.sellers[0].commertialOffer.AvailableQuantity > 0){
+                                                return firstSku =  product.items[i];
+                                            }
+                                        });
+        
+                                        var productImage = firstSku.images[0].imageUrl.replace( firstSku.images[0].imageId , firstSku.images[0].imageId + '-400-400');
+                                        var productComm = firstSku.sellers[0].commertialOffer;
+                                        var productInventory = '';
+        
+                                        // console.log('productComm.AvailableQuantity:',productComm.AvailableQuantity);
+                                        if(productComm.AvailableQuantity < 10){
+                                            productInventory = '<div class="product-inventory">Solo '+ productComm.AvailableQuantity +' disp(s)</div>';
+                                        }
+        
+                                        var productListprice = '';
+                                        if(productComm.ListPrice >= productComm.Price){
+                                            productListprice = '<div class="product-listPrice">'+ WebsiteGlobal.global.numFormat( productComm.ListPrice ) +'</div>';
+                                        }
+        
+                                        var productPrice = '<div class="product-bestPrice">'+ WebsiteGlobal.global.numFormat( productComm.Price ) +'</div>';
+        
+                                        var productReward = '';
+                                        if(productComm.RewardValue > 0){
+                                            productReward = '<div class="bluecoins-reward">'+
+                                                                '<span class="bluecoins-amount nodec">' + WebsiteGlobal.global.numFormat( productComm.RewardValue ) + '</span>'+
+                                                                '<span class="bluecoins-icon-reward">Blue Coins</span>'+
+                                                            '</div>';
+                                        }
+        
+                                        // console.log(WebsiteGlobal.global.numFormat(productPrice));
+        
+                                        var productTemplate =   $('<article class="countdown-product">'+
+                                                                    '<a href="/'+ product.linkText +'/p" title="'+ product.productName +'">'+
+                                                                    '<picture class="product-image">'+
+                                                                        '<img src="'+ productImage +'" />'+
+                                                                    '</picture>'+
+                                                                    '</a>'+
+                                                                    '<a href="/'+ product.linkText +'/p" title="'+ product.productName +'">'+
+                                                                        '<h4 class="product-title">'+ product.productName +'</h4>'+
+                                                                        '<div class="product-price">'+
+                                                                            productListprice +
+                                                                            productPrice + 
+                                                                            productReward +
+                                                                        '</div>'+
+                                                                        productInventory +
+                                                                        '<div class="cta">Comprar ahora</div>'+
+                                                                    '</a>'+
+                                                                '</article>');
+                                        
+                                        dealProductWrapper.append(productTemplate);
+                                    }else{
+                                        dealProductWrapper.addClass('out-of-stock');
+                                        dealProductWrapper.append('<h2 class="text-center">Oferta Agotada</h2>');
+                                    }
+
+                                }
+                            });
+                        }
+
+                    });
+                }
+            }
+
+            if ($('body').hasClass('landing-content navidad')) {
+                dailyDeal();
+            }
+        },
+
+        samsung_care: function(){
+
+            var $careWrapper = $('body').find('.care-info-wrapper');
+            var $careContainer = $('body').find('.care-info-container');
+            var $offeringListing = $careWrapper.find('.care-service-offering');
+            var $offeringActions = $offeringListing.find('.care-selection-actions');
+
+            var showProductOfferings = function(productData){
+
+                $careWrapper.addClass('show-product-options');
+                $careContainer.addClass('offer-options-shown');
+
+                var productTemplate = 
+                '<article class="selected-product" data-sku="'+ productData.Sku +'" data-sku-index="'+ productData.SkuIndex +'">'+
+                    '<picture><img src="'+ productData.item.imageUrl +'" alt="'+ productData.item.skuName +'" /></picture>'+
+                    '<div class="product-info">'+
+                    '<h2>'+ productData.item.skuName +'</h2>'+
+                    '</div>'+
+                '</article>';
+
+                $offeringListing.append(productTemplate);
+                
+                var $offeringListWrap = $('<div>').addClass('offerings-list');
+
+                console.log('productData.offerings', productData.offerings);
+
+                $.each(productData.offerings, function(i, offer){
+                    console.log('offer:', offer);
+                    if(offer.name.toLowerCase().indexOf('care') > -1){
+                        var checkOffer = i == 0 ? 'checked' : '';
+                        var offerPrice = offer.price > 0 ? numberFormat( offer.price / 100 ) : 0;
+                        $offeringListWrap.append(
+                        '<div class="offering '+ checkOffer +'" offering-id="'+ offer.id +'">'+
+                            '<input type="radio" id="care-'+ offer.id +'" name="offering-item" '+ checkOffer +' />'+
+                            '<label for="care-'+ offer.id +'" class="offering-label">'+
+                                '<span class="s-box"></span>'+
+                                '<div class="offering-desc">'+
+                                    '<h3 class="offering-name">Samsung Care+</h3>'+
+                                    '<span class="offering-sub">'+ offer.name +'</span>'+
+                                '</div>'+
+                                '<div class="offering-price">'+ offerPrice +'</div>'+
+                            '</label>'+
+                        '</div>'
+                        );
+                    }
+                });
+
+                $offeringListWrap.append('<div class="offering" offering-id="0">'+
+                    '<input type="radio" id="care-0" name="offering-item" />'+
+                    '<label for="care-0" class="offering-label">'+
+                        '<span class="s-box"></span>'+
+                        '<div class="offering-desc">'+
+                            '<h3 class="offering-name">No agregar Samsung Care+</h3>'+
+                            '<span class="offering-sub"></span>'+
+                        '</div>'+
+                        '<div class="offering-price"></div>'+
+                    '</label>'+
+                '</div>');
+
+                $offeringListing.append($offeringListWrap);
+
+                productOfferingsActions(productData);
+
+            }//showProductOfferings
+
+            var productOfferingsActions = function(productData){
+                $(document).on('click', '[type="radio"]', function(e){
+                    console.log("$(this).is(':checked')", $(this).is(':checked'));
+
+                    $(this).parent().siblings().removeClass('checked');
+                    $offeringListing.find('[type="radio"]').not(this).attr('checked', false);
+
+                    if($(this).is(':checked')){
+                        console.log('add mark');
+                        $(this).parent().addClass('checked');
+                        $(this).parent().find('[type="radio"]').attr('checked', true);
+                    }else{
+                        console.log('remove mark');
+                        // $(this).parent().removeClass('checked');
+                        // $(this).parent().find('[type="checkbox"]').removeAttr('checked');
+                    }
+                    
+                });
+
+                $(document).on('click', '.add-service', function(e){
+
+                    if($('.offering.checked').attr('offering-id') == 0){
+                        window.location.href = "/checkout/#/cart"
+                    }else{
+
+                        vtexjs.checkout.addOffering( $('.offering.checked').attr('offering-id') , productData.SkuIndex)
+                        .done(function(a) {
+                            console.log('Samsung care agregado al producto');
+                            return window.location.href = "/checkout/#/cart"
+                        }).fail(function(){
+                            console.log( "Ocurrio un problema al agregar el producto al carro - 2" );
+                        });
+                    }
+                });
+
+            };
+
+            if ($('body').hasClass('landing-content samsung-care')) {
+                
+                //Get Query String info, check Sku has been specified and added to cart too
+                if(getUrlVars()["sku"]!==undefined){
+                    var selectedProd = {};
+
+                    selectedProd.TotalPrice = null,
+                    selectedProd.TotalInstallmentPrice = null,
+                    selectedProd.Sku = parseInt(getUrlVars()["sku"]),
+                    selectedProd.SkuIndex = parseInt(getUrlVars()["index"]),
+                    selectedProd.IsStable = -1 < window.location.href.indexOf("vtexcommercestable"),
+                    selectedProd.SelectedOfferId = -1;
+                        
+                    vtexjs.checkout.getOrderForm().done(function(a) {
+                        selectedProd.orderForm = a;
+                        if(selectedProd.orderForm.items.length > 0){
+
+                            selectedProd.item = selectedProd.orderForm.items[selectedProd.SkuIndex];
+
+                            console.log('selectedProd.item', selectedProd.item);
+                            if(selectedProd.Sku == selectedProd.item.id){
+                                selectedProd.offerings = selectedProd.item.offerings.length > 0 ? selectedProd.item.offerings : '';
+                                // e.Item = e.OrderForm.items[e.SkuIndex]
+                                selectedProd.currentAddedOffers = selectedProd.item.bundleItems;
+    
+                                console.log('Product on cart');
+                                //dataSetup finish, show product offerings
+                                console.log('selectedProd: ',selectedProd);
+                                showProductOfferings( selectedProd );
+                            }
+                        }
+
+                    });
+
+                }else{
+
+                }
+
+            }
+        },
+
+        landing_buenFin: function(){
+            if ($('body').hasClass('landing-buenFin')) {
+                var slickOpts = {
+                slidesToShow: 4,
+                slidesToScroll: 1,
+                autoplay: true,
+                autoplaySpeed: 2000,
+                arrows: false,
+                responsive: [
+                    {
+                    breakpoint: 768,
+                    settings: {
+                        arrows: false,
+                        centerMode: true,
+                        centerPadding: '40px',
+                        slidesToShow: 1
+                    }
+                    }
+                ]
+                }
+                $('.carousel .items').slick(slickOpts);
+            
+                $(".page-content").find('.product-listing').addClass("active");
+            }  
+        },//landing_buenFin
+
+        landing_cyberWeek: function(){
+            if ($('body').hasClass('landing-content cyberweek')) {
+
+                $('.carousel .items').slick({
+                    arrows: true,
+                    dots: false,
+                    slidesToShow: 4,
+                    slidesToScroll: 1,
+                    autoplay: true,
+                    autoplaySpeed: 2000,
+                    responsive: [
+                    {
+                        breakpoint: 768,
+                        settings: {
+                        arrows: true,
+                        centerPadding: '10px',
+                        slidesToShow: 1
+                        }
+                    }
+                    ]
+                });
+            
+            }
+        },//landing_cyberWeek
+        
+        featured_quotes: function(){
+            // if ($('body').hasClass('landing-content galaxy-z-flip')) {
+                // $('.featured-quotes').slick({
+                //     dots: false,
+                //     infinite: true,
+                //     speed: 300,
+                //     slidesToShow: 1,
+                //     autoplay: true,
+                //     autoplaySpeed: 3000
+                // });
+            // }
+        },//landing_flipz
+
+        mothersDay: function(){
+            if ($('body').hasClass('landing-content mothers-day')) {
+                $productArticles = $('.product-listing-mothers-day').find('article.item');
+                if($productArticles.length > 0){
+                    $productArticles.each(function(i,article){
+                        $currArticle = $(this);
+                        //move installments
+                        $currArticle.find('.installments').appendTo($currArticle.find('.item-image'));
+                        $currArticle.find('.flags').insertBefore($currArticle.find('.add-to-cart'));
+                    });
+                }
+
+                $('.product-listing-mothers-day').find('.helperComplement').remove();
+
+                
+                    $('.product-listing-mothers-day ul').slick({
+                        dots: true,
+                        arrows: false,
+                        infinite: true,
+                        speed: 300,
+                        slidesToShow: 3,
+                        slidesToScroll: 3,
+                        responsive: [
+                            {
+                                breakpoint: 1024,
+                                settings: {
+                                    centerMode: true
+                                }
+                            },
+                            {
+                                breakpoint: 767,
+                                settings: {
+                                    slidesToShow: 1,
+                                    slidesToScroll: 1,
+                                    dots: false,
+                                    arrows: true,
+                                    // centerMode: true
+                                }
+                            }
+                            // You can unslick at a given breakpoint now by adding:
+                            // settings: "unslick"
+                            // instead of a settings object
+                        ]
+                    });
+            }
+        }//mothersDay
+    }
+
+    contentLanding.init();
+});

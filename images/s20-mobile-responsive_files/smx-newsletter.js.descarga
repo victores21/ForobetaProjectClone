@@ -1,0 +1,216 @@
+/*  Newsletter modal handler Start  */
+
+/* Cookie handler lib */
+(function(c){"function"===typeof define&&define.amd?define(["jquery"],c):"object"===typeof exports?c(require("jquery")):c(jQuery)})(function(c){function n(b){b=f.json?JSON.stringify(b):String(b);return f.raw?b:encodeURIComponent(b)}function m(b,e){var a;if(f.raw)a=b;else a:{var d=b;0===d.indexOf('"')&&(d=d.slice(1,-1).replace(/\\"/g,'"').replace(/\\\\/g,"\\"));try{d=decodeURIComponent(d.replace(l," "));a=f.json?JSON.parse(d):d;break a}catch(g){}a=void 0}return c.isFunction(e)?e(a):a}var l=/\+/g,f=
+c.cookie=function(b,e,a){if(void 0!==e&&!c.isFunction(e)){a=c.extend({},f.defaults,a);if("number"===typeof a.expires){var d=a.expires,g=a.expires=new Date;g.setTime(+g+864E5*d)}return document.cookie=[f.raw?b:encodeURIComponent(b),"=",n(e),a.expires?"; expires="+a.expires.toUTCString():"",a.path?"; path="+a.path:"",a.domain?"; domain="+a.domain:"",a.secure?"; secure":""].join("")}a=b?void 0:{};for(var d=document.cookie?document.cookie.split("; "):[],g=0,l=d.length;g<l;g++){var h=d[g].split("="),k;
+k=h.shift();k=f.raw?k:decodeURIComponent(k);h=h.join("=");if(b&&b===k){a=m(h,e);break}b||void 0===(h=m(h))||(a[k]=h)}return a};f.defaults={};c.removeCookie=function(b,e){if(void 0===c.cookie(b))return!1;c.cookie(b,"",c.extend({},e,{expires:-1}));return!c.cookie(b)}});
+
+$(function(){
+    newsForm.init();
+});
+
+var newsForm = function(){
+
+    var theFormModal = $('#newsletter-modal');
+    var cookieName = "newsletter-shown";
+    var storeName = "samsungmx";
+    var dataEntity = "NL";
+
+    var init = function(){
+        newsletterModalSetup();
+        registerNewLead();
+    };
+
+    var newsletterModalSetup = function(){
+        var homeModal = {
+            init : function(){
+                if(homeModal.readCookie()){
+                    homeModal.showModal();
+                    cleanErrors();
+                }
+            },
+            readCookie: function(){
+                // && $("body").hasClass("home")
+                if(!$.cookie(cookieName) && !$.cookie(cookieName)){        
+                    return true;
+                }else{
+                    return false;
+                }
+            },
+            setCookie: function(){
+                $.cookie(cookieName,'true', { expires: 7, path: '/' });
+            },
+            showModal: function(){
+                setTimeout(function(){ theFormModal.modal({backdrop:"static"}); },100);
+                theFormModal.on('hide', function () {
+                    homeModal.setCookie();
+                });
+            }
+        }
+    
+        //Iniatiate modal
+        homeModal.init();
+    };
+
+    ///Email format validation
+    var IsEmail = function(email) {
+        var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        return regex.test(email);
+    };
+
+    /// Functions required to validate the form and post the info
+    var cleanErrors = function(){
+        theFormModal.find(".help.error").remove();
+        theFormModal.find(".input-error").removeClass('input-error');
+    };
+
+    ///Check email on Newsletter database
+    var CheckEmailNL = function(email){
+        $.ajax({contentType:"application/json; charset=utf-8",
+            data:{f:"email",fq:"email:"+email},
+            type:"GET",
+            url:"/api/ds/pub/documents/"+dataEntity,
+            success:function(a){
+                cleanErrors(),
+                $('.newsletter-form').slideDown(500);
+                $('.newsletter-messages').find('#optin-loading').removeClass('active');
+                theFormModal.find("#nl_email").addClass('input-error'),
+                theFormModal.find("#nl_email").after("<span class='help error animated fadeIn'>Este correo electrónico ya se encuentra registrado</span>")},
+            error:function(a){
+                addEmailtoNL(),
+                cleanErrors()
+                // console.log("Error verificarEmailHome:"+email)
+            }
+        })
+    };
+
+    ///Register Email in Newsletter database
+    var addEmailtoNL = function(){
+        var cat_count = 0;
+
+        formData={},
+        formData.name=theFormModal.find("#nl_full_name").val(),
+        formData.email=theFormModal.find("#nl_email").val(),
+        formData.phone=theFormModal.find("#nl_phone").val();
+
+        $.ajax({contentType:"application/json; charset=utf-8",
+                data:JSON.stringify(formData),
+                type:"POST",
+                url:"/api/ds/pub/documents/"+dataEntity,
+                success:function(a){
+                    dataLayer.push({event:"inscripcionNewsletterNL",emailSigned:formData.email,emailSigned:formData.name,emailSigned:formData.phone}),
+                    // checkEmailCL(theFormModal.find("#nl_email").val());
+                    //sendEmBlueEvent(formData);
+                    
+                    $('.newsletter-messages').find('#optin-loading').removeClass('active');
+                    $('.newsletter-messages').find('#newsletter-success').addClass('active');
+
+                    setTimeout(function() {
+                        $('#newsletter-modal').modal('hide')
+                    }, 5000);
+                },
+                error:function(a){
+                    // checkEmailCL(theFormModal.find("#nl_email").val())
+                    console.log("Can't get data"),
+                    console.log(a)
+                }
+        });
+    };
+
+    ///Query registered email in Client database
+    var checkEmailCL = function(email){
+        data={f:"email",fq:"email:"+email},
+        $.ajax({contentType:"application/json; charset=utf-8",
+                data:data,type:"GET",
+                url:"/api/ds/pub/documents/CL",
+                success:function(a){
+                    $(".form-news").css({opacity:0}); 
+                    $(".promo-news").css({opacity:0});
+                    $("#optin-success").delay(500).fadeIn(); 
+                    setTimeout(function(){ theFormModal.modal('hide') }, 10000);
+                },
+                error:function(a){
+                    $(".form-news").animate({opacity:0}); 
+                    $(".promo-news").css({opacity:0});
+                    $("#optin-success").delay(500).fadeIn(); 
+                    setTimeout(function(){ theFormModal.modal('hide') }, 10000);
+                    //registerInCL()
+                }
+        })
+    }
+
+    ///If client not registered, add to client database
+    var registerInCL = function(){
+        formData={},
+        formData.email= theFormModal.find("#nl_email").val(),
+        formData.isNewsletterOptIn = 'true',
+        $.ajax({contentType:"application/json; charset=utf-8",
+                data:JSON.stringify(formData),type:"POST",
+                url:"/api/ds/pub/documents/CL",
+                success:function(a){
+                    console.log("Data sent to CL");
+                    // $(".form-news").animate({opacity:0}); 
+                    // $("#optin-success").delay(500).fadeIn(); 
+                    // setTimeout(function(){ $('#newsletter-modal').modal('hide') }, 5000);
+                }
+        })
+    };
+
+    var registerNewLead = function(){
+        ///JS validation of form submission
+        theFormModal.find(".register-news").click(function(e) {
+            var clientEmail = theFormModal.find("#nl_email").val();
+            var clientName = theFormModal.find("#nl_full_name").val();
+            cleanErrors();
+
+            if(clientName ==""){
+                theFormModal.find("#nl_full_name").addClass('input-error');
+                theFormModal.find("#nl_full_name").after("<span class='help error'>El campo Nombre esta vacio</span>");
+            }
+
+            if(!IsEmail(clientEmail)){
+                theFormModal.find("#nl_email").addClass('input-error');
+                theFormModal.find("#nl_email").after("<span class='help error'>Verifica el formato de tu email</span>");
+            }
+
+            if(IsEmail(clientEmail) && clientName !=""){
+                cleanErrors();
+                $('.newsletter-form').slideUp(500);
+                $('.newsletter-messages').find('#optin-loading').addClass('active');
+                CheckEmailNL(clientEmail);
+            }
+            
+        });
+    };
+
+    var sendEmBlueEvent = function(formData) {
+        var form_data = {
+            "email": formData.email,
+            "eventName": "newsletterSamsungMX",
+            "attributes": {
+                "nombre": formData.name,
+                "telefono": formData.phone,
+            }
+        }
+    
+        var settings = {
+            crossDomain: true,
+            url: "https://track.embluemail.com/contacts/event",
+            method: "POST",
+            type: "POST",
+            "headers": {
+                "Authorization": "NzhlMmY3ZWIyNWYzNDNlYTgyNzgyMWU5YzQxYzI1MTE=",
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify(form_data)
+        }
+    
+        $.ajax(settings).done(function(response) {
+            console.log(response);
+        });
+    };
+
+    return {
+        init: init
+    }
+}();//newsForm

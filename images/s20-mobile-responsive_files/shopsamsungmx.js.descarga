@@ -1,0 +1,57 @@
+﻿(function () {
+    var intervalDelay = 2000;
+
+    function firePixel(ids, category, type, term) {
+        var clinchCid = 'tigv7Y';
+
+        var trkServer = "//trk.clinch.co/";
+        var clinchServ = "trk";
+        var countryCode = 'MX';
+        var product = 'ecommerce';
+        var ver = 'samsung1.0';
+
+        (new Image)['src'] = trkServer + clinchServ + '?' +
+            'cid=' + clinchCid + '&' +
+            //'puid=' + puid + '&' +
+            'country=' + countryCode + '&' +
+            'product=' + product + '&' +
+            'version=' + ver + '&' +
+            'a=' + Date.now() + '&' +
+            'type=' + type + '&' +
+            (ids ? 'ids=' + ids + '&' : '') +
+            (category ? 'category=' + category + '&' : '') +
+            (term ? 'term=' + term + '&' : '') +
+            'referrer=' + encodeURIComponent(window.location.href);
+    }
+
+    var intervalPointer = setInterval(function () {
+        if (window.dataLayer) {
+            clearInterval(intervalPointer);
+
+            var dataLayerSize = 0;
+            setInterval(function () {
+                if (dataLayerSize < window.dataLayer.length) {
+                    window.dataLayer.slice(dataLayerSize, window.dataLayer.length).forEach(function (dataLayerItem) {
+                        var type;
+                        if (dataLayerItem.event === 'cart') {
+                            type = 'addToCart';
+                        } else if (dataLayerItem.pageCategory === 'Product') {
+                            type = 'details';
+                        } else if (dataLayerItem.pageCategory === 'Department') {
+                            type = 'category';
+                        } else if (dataLayerItem.pageCategory === 'InternalSiteSearch') {
+                            type = 'search';
+                        }
+
+                        type && firePixel(
+                            (dataLayerItem.shelfProductIds || []).concat(dataLayerItem.skuStockOutFromShelf).concat([dataLayerItem.productId]).concat(dataLayerItem.event === 'cart' && dataLayerItem.ecommerce && dataLayerItem.ecommerce.checkout && dataLayerItem.ecommerce.checkout.products ? dataLayerItem.ecommerce.checkout.products.map(function (product) { return product.id }) : []).filter(function (item) { return item }).join(),
+                            dataLayerItem.productCategoryName || dataLayerItem.pageDepartment,
+                            type,
+                            dataLayerItem.siteSearchTerm);
+                    });
+                    dataLayerSize = window.dataLayer.length;
+                }
+            }, intervalDelay);
+        }
+    }, 100);
+})();
