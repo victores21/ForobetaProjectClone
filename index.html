@@ -4,13 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Compra el nuevo Galaxy S20</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="styles/style.css" />
     <link rel="icon" href="./images/icons8-s-50.png" />
   </head>
   <body>
+    <!--Responsive Container for 4k viewports-->
     <div class="full-size">
       <div class="container">
+        <!--Opinion Container-->
         <div class="opinions">
+          <!--Image Opinion (This changes depending of the viewport)-->
           <img id="image-opinion" src="./images/s20-responsive.webp" alt="" />
           <div class="opinion">
             <p>
@@ -18,7 +21,7 @@
               desempeño, excelente construcción y un perfecto balance entre
               poder y duración de la batería”
             </p>
-            <p id="author">-Unocero</p>
+            <p id="author">- Unocero</p>
           </div>
         </div>
         <!--Descubre s20-->
@@ -26,9 +29,11 @@
           <div class="title">
             Descubre Galaxy S20
           </div>
+          <!--Phone Image-->
           <div class="s20-image">
             <img src="./images/s20-phone.webp" alt="" />
           </div>
+          <!-- Phone Information-->
           <div class="info">
             <div class="name">
               <p>Galaxy S20</p>
@@ -47,8 +52,14 @@
               <p>Batería de 4,000 mAh</p>
             </div>
           </div>
+          <!--Aqui es donde debe cambiar la URL-->
+          <!--Button to buy (Redirect button)-->
           <div class="buy-button">
-            <a href="#">
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://www.youtube.com/"
+            >
               COMPRAR GALAXY S20
             </a>
           </div>
@@ -74,11 +85,12 @@
             </p>
           </div>
         </div>
-        <!--8K-->
+        <!--8K container-->
         <div class="video-container">
           <div class="video-image">
             <img src="./images/8k.webp" alt="" />
           </div>
+          <!--Text-->
           <div class="video-text">
             <p>
               <strong id="video-strong"
@@ -120,6 +132,7 @@
         </div>
       </div>
     </div>
-    <script src="script.js"></script>
+    <!--Scripts-->
+    <script src="js/script.js"></script>
   </body>
 </html>
