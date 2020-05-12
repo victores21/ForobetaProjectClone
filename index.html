@@ -49,12 +49,39 @@
           <!--Image Opinion (This changes depending of the viewport)-->
           <img id="image-opinion" src="./images/s20-responsive.webp" alt="" />
           <div class="opinion">
-            <p>
-              “La serie S20 de Galaxy continúa con la tradición de alto
-              desempeño, excelente construcción y un perfecto balance entre
-              poder y duración de la batería”
-            </p>
-            <p id="author">- Unocero</p>
+            <!--Slider-->
+            <!-- Slideshow container -->
+            <div class="slideshow-container">
+              <!-- Full-width slides/quotes -->
+              <div class="mySlides">
+                <q
+                  >La serie S20 de Galaxy continúa con la tradición de alto
+                  desempeño, excelente construcción y un perfecto balance entre
+                  poder y duración de la batería
+                </q>
+                <p class="author">- Unocero</p>
+              </div>
+
+              <div class="mySlides">
+                <q
+                  >But man is not made for defeat. A man can be destroyed but
+                  not defeated.</q
+                >
+                <p class="author">- Ernest Hemingway</p>
+              </div>
+
+              <div class="mySlides">
+                <q
+                  >I have not failed. I've just found 10,000 ways that won't
+                  work.</q
+                >
+                <p class="author">- Thomas A. Edison</p>
+              </div>
+
+              <!-- Next/prev buttons -->
+              <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+              <a class="next" onclick="plusSlides(1)">&#10095;</a>
+            </div>
           </div>
         </div>
         <!--Descubre s20-->
@@ -171,5 +198,6 @@
       src="https://kit.fontawesome.com/c7c21d079c.js"
       crossorigin="anonymous"
     ></script>
+    <script src="js/slider.js"></script>
   </body>
 </html>

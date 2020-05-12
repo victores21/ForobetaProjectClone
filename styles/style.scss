@@ -238,7 +238,58 @@ $samsung-bold: Samsung Sharp Sans Bold;
     padding: 0;
     list-style: none;
   }
+  /*Slider Ex*/
+  /* Slideshow container */
+  .slideshow-container {
+    position: relative;
+    background: #fffffff1;
+  }
 
+  /* Slides */
+  .mySlides {
+    display: none;
+    padding: 80px;
+  }
+
+  /* Next & previous buttons */
+  .prev,
+  .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    margin-top: -30px;
+    padding: 16px;
+    color: #5e5e5e;
+    font-weight: 100;
+    font-size: 20px;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    font-size: 50px;
+  }
+
+  /* Position the "next button" to the right */
+  .next {
+    position: absolute;
+    right: 0;
+    border-radius: 3px 0 0 3px;
+  }
+
+  /* On hover, add a black background color with a little bit see-through */
+
+  /* Add an italic font style to all quotes */
+  q {
+    font-family: $samsung-regular;
+    font-size: 20px;
+  }
+
+  /* Add a blue color to the author */
+  .author {
+    color: #000;
+    font-family: $samsung-bold;
+    padding-top: 1rem;
+    font-size: 20px;
+  }
   /*Opinion Container*/
   .opinions {
     grid-area: opinions;
