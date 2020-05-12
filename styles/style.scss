@@ -60,10 +60,10 @@ $samsung-bold: Samsung Sharp Sans Bold;
     height: auto;
     position: fixed;
     right: 1rem;
-    top: 40px;
+    top: 20px;
     z-index: 2;
     i {
-      font-size: 25px;
+      font-size: 22px;
       cursor: pointer;
     }
   }
@@ -72,7 +72,7 @@ $samsung-bold: Samsung Sharp Sans Bold;
     position: fixed;
     width: 100%;
     //height: 100%;
-    height: 100px;
+    height: 65px;
     background: #fff;
     color: #000;
     justify-content: center;
@@ -123,7 +123,7 @@ $samsung-bold: Samsung Sharp Sans Bold;
     border: 0;
     background: transparent;
     border-radius: 0;
-    height: 100px;
+    height: 65px;
     width: 30px;
     cursor: pointer;
     pointer-events: auto;
@@ -549,6 +549,9 @@ $samsung-bold: Samsung Sharp Sans Bold;
   }
 }
 @media (min-width: 1024px) {
+  header {
+    height: 85px !important;
+  }
   .opinions {
     .opinion {
       left: 50%;
@@ -570,11 +573,16 @@ $samsung-bold: Samsung Sharp Sans Bold;
 }
 
 @media (min-width: 1440px) {
+  header {
+    height: 85px !important;
+  }
   .button {
     margin-left: 4rem !important;
+    height: 90px !important;
   }
   .search-bar {
     margin-right: 4rem !important;
+    top: 35px !important;
   }
   .opinions {
     .opinion {
