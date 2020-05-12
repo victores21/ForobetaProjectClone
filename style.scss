@@ -50,6 +50,7 @@ $samsung-bold: Samsung Sharp Sans Bold;
     padding-left: 0.8rem;
     padding-right: 0.8rem;
     line-height: 20px;
+
     img {
       width: 100%;
       height: auto;
@@ -366,10 +367,10 @@ $samsung-bold: Samsung Sharp Sans Bold;
     margin-left: 4rem !important;
   }
 }
-@media (min-width: 1445px) {
+@media (min-width: 1700px) {
   .full-size {
     width: 100%;
-    display: grid;
+    display: flex;
     justify-content: center;
     .container {
       max-width: 1440px;
